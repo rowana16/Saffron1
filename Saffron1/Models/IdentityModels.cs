@@ -13,8 +13,9 @@ namespace Saffron1.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string DisplayName { get; set; }
-        public int HouseholdId { get; set; }
+        public int? HouseholdId { get; set; }
         public bool HeadOfHousehold { get; set; }
+       
         public virtual Household Household { get; set; }
 
 

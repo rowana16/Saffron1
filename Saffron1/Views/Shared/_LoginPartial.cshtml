@@ -1,13 +1,25 @@
 ﻿@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+@using Saffron1.Models
 @if (Request.IsAuthenticated)
 {
+    var Manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+    var currUser = Manager.FindById(User.Identity.GetUserId());
+    string displayName;
+
+    if(String.Empty == currUser.DisplayName || currUser.DisplayName == null)
+    {
+        displayName = currUser.Email;
+    }
+    else { displayName = currUser.DisplayName;  }
+
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
-    @Html.AntiForgeryToken()
+                    @Html.AntiForgeryToken()
 
-    <ul class="nav navbar-nav navbar-right">
+                    <ul class="nav navbar-nav navbar-right">
         <li>
-            @Html.ActionLink("Hello " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+            @Html.ActionLink("Hello " + displayName + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
         </li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
     </ul>
