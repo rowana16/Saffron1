@@ -6,6 +6,9 @@
 *.user
 *.userosscache
 *.sln.docstates
+Saffron1/web.config
+Saffron1/Migrations/Configuration.cs
+Saffron1/private.config
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
