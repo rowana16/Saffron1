@@ -52,6 +52,7 @@ namespace Saffron1.Controllers
 
         //
         // GET: /Manage/Index
+        [HttpGet]
         public async Task<ActionResult> Index(ManageMessageId? message)
         {
             ViewBag.StatusMessage =
@@ -73,6 +74,29 @@ namespace Saffron1.Controllers
                 BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(userId)
             };
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Index (string FirstName, string LastName)
+        {
+            var updateUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());
+            updateUser.FirstName = FirstName;
+            updateUser.LastName = LastName;
+            updateUser.DisplayName = FirstName + " " + LastName;
+
+            var result = await UserManager.UpdateAsync(updateUser);
+            if (result.Succeeded)
+            {
+                if (updateUser != null)
+                {
+                    await SignInManager.SignInAsync(updateUser, isPersistent: false, rememberBrowser: false);
+                }
+                return RedirectToAction("Index", "Manage");
+            }
+
+            AddErrors(result);
+            return View();
+
         }
 
         //

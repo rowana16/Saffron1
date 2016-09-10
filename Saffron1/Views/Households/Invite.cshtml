@@ -1,0 +1,19 @@
+﻿
+@{
+    ViewBag.Title = "Invite";
+}
+
+<h2>Invite someone to your household</h2>
+
+<div class="container">
+   @using (Html.BeginForm("Invite", "Households", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+   {
+       <div class="row">
+           <div class="col-md-2">  Email  </div>
+           <input class="form-control col-md-12d" type="email" name="email" />
+           <input type="submit" class="col-md-10 btn btn-primary" value="Send Invite" />
+       </div>
+    
+   }
+</div>
+

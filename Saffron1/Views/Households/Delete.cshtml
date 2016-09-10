@@ -1,0 +1,24 @@
+﻿@model Saffron1.Models.Household
+@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Leaving So Soon?</h2>
+
+<h3>Are you sure you want to leave this household?</h3>
+<div>
+    <hr />
+   
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Leave Household" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index", "Home")
+        </div>
+    }
+</div>

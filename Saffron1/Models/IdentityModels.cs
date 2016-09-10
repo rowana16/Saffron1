@@ -50,6 +50,7 @@ namespace Saffron1.Models
         public DbSet<TypeTransaction> TypeTransaction { get; set; }
         public DbSet<AccountType> AccountType { get; set; }
         public DbSet<Institution> Institution { get; set; }
+        public DbSet<Invitee> Invitee { get; set; }
 
     }
 }

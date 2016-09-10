@@ -219,6 +219,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\HouseholdsController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -230,6 +231,7 @@
     <Compile Include="Models\Budget.cs" />
     <Compile Include="Models\BudgetItem.cs" />
     <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Invitee.cs" />
     <Compile Include="Models\Household.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Institution.cs" />
@@ -302,6 +304,12 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Service References\Application Insights\ConnectedService.json" />
     <Content Include="Private.config" />
+    <Content Include="Views\Households\Create.cshtml" />
+    <Content Include="Views\Households\Delete.cshtml" />
+    <Content Include="Views\Households\Details.cshtml" />
+    <Content Include="Views\Households\Edit.cshtml" />
+    <Content Include="Views\Households\Index.cshtml" />
+    <Content Include="Views\Households\Invite.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

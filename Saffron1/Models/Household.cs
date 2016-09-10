@@ -20,11 +20,15 @@ namespace Saffron1.Models
             this.Accounts = new HashSet<Account>();
             this.Budgets = new HashSet<Budget>();
             this.Categories = new HashSet<Category>();
+            this.Users = new HashSet<ApplicationUser>();
+            this.Invitees = new HashSet<Invitee>();
         }
 
         public virtual ICollection<Account> Accounts { get; set; }
         public virtual ICollection<Budget> Budgets { get; set; }
         public virtual ICollection<Category> Categories { get; set; }
+        public virtual ICollection<ApplicationUser> Users { get; set; }
+        public virtual ICollection<Invitee> Invitees { get; set; }
 
     }
 }
