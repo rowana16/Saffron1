@@ -8,11 +8,14 @@ using System.Web;
 using System.Web.Mvc;
 using Saffron1.Models;
 using Microsoft.AspNet.Identity;
+using System.Configuration;
+using SendGrid;
 
 namespace Saffron1.Controllers
 {
     public class HouseholdsController : Controller
     {
+        
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Households
@@ -147,13 +150,37 @@ namespace Saffron1.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Invite (string Email)
         {
             Invitee newInvitee = new Invitee();
+            var apiKey = ConfigurationManager.AppSettings["SendGridAPIKey"];
+            var from = ConfigurationManager.AppSettings["ContactEmail"];
+            ApplicationUser currUser = db.Users.Find(User.Identity.GetUserId());
+            SendGridMessage myMessage = new SendGridMessage();
+            myMessage.AddTo(Email);
+            myMessage.From = new System.Net.Mail.MailAddress("DoNotReply@Saffron1.com");
+            myMessage.Subject = "An Invitation From Saffron1";
+           
+
             newInvitee.Email = Email;
+            newInvitee.BeenUsed = false;
+            newInvitee.HouseholdId = (int)currUser.HouseholdId;
+            if (currUser.HouseholdId.HasValue) { newInvitee.HouseholdId = (int)currUser.HouseholdId; }
 
-            db.i
+            if (ModelState.IsValid)
+            {
+                db.Invitee.Add(newInvitee);
+                db.SaveChanges();
+                int Id = newInvitee.Id;
+                myMessage.Html = "You have been invited to join a household.  Click this link to Register and Join: http://arowan-budgeter.azurewebsites.net/Account/ExternalRegister/" + Id ;
+                var transportWeb = new Web(ConfigurationManager.AppSettings["SendGridAPIKey"]);
+                transportWeb.DeliverAsync(myMessage);
+                return RedirectToAction("Index", "Home");
 
+            }
+
+            return RedirectToAction("Index", "Home");
 
         }
 

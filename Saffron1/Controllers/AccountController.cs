@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Saffron1.Models;
+using System.Data.Entity;
 
 namespace Saffron1.Controllers
 {
@@ -17,6 +18,7 @@ namespace Saffron1.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         public AccountController()
         {
@@ -134,7 +136,8 @@ namespace Saffron1.Controllers
             }
         }
 
-        //
+// =========================== Register and External Register Get ===============================
+
         // GET: /Account/Register
         [AllowAnonymous]
         public ActionResult Register()
@@ -142,16 +145,27 @@ namespace Saffron1.Controllers
             return View();
         }
 
-        //
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+        public ActionResult ExternalRegister(int Id )
+        {
+            Invitee currInvitee = db.Invitee.Find(Id);
+            RegisterViewModel viewModel = new RegisterViewModel();
+            viewModel.currInvitee = currInvitee;
+            return View(viewModel);
+                
+        }
+
+//// =========================== Register and External Register Post ===============================
         // POST: /Account/Register
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(string FirstName, string LastName, string Email, string Password, int InviteeId, int HouseholdId)
         {
             
-            var user = new ApplicationUser { FirstName = model.FirstName, LastName=model.LastName, DisplayName = model.FirstName + " " + model.LastName,  Email = model.Email , UserName = model.Email};
-            var result = await UserManager.CreateAsync(user, model.Password);
+            var user = new ApplicationUser { FirstName = FirstName, LastName = LastName, DisplayName = FirstName + " " + LastName,  Email = Email , UserName = Email, HeadOfHousehold = true };
+            var result = await UserManager.CreateAsync(user, Password);
             if (result.Succeeded)
             {
                 await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
@@ -174,10 +188,49 @@ namespace Saffron1.Controllers
           
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return View();
         }
 
-        //
+///////////////////////////////////////////////////////////////////////////////////////
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ExternalRegister(string FirstName, string LastName, string Email, string Password, int InviteeId, int HouseholdId)
+        {
+            
+            var currInvitee = db.Invitee.Find(InviteeId);
+            if (currInvitee.BeenUsed == false)
+            {
+                var user = new ApplicationUser { FirstName = FirstName, LastName = LastName, DisplayName = FirstName + " " + LastName, Email = Email, UserName = Email, HouseholdId = HouseholdId, HeadOfHousehold = false };
+                var result = await UserManager.CreateAsync(user, Password);
+                if (result.Succeeded)
+                {
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                    currInvitee.BeenUsed = true;
+
+                    db.Entry(currInvitee).State = EntityState.Modified;
+                    db.SaveChanges();
+
+
+                    return RedirectToAction("Index", "Home");
+                }
+
+                else
+                {
+                    var errors = ModelState.SelectMany(x => x.Value.Errors.Select(z => z.Exception));
+                }
+
+                AddErrors(result);
+            }
+           
+
+
+            // If we got this far, something failed, redisplay form
+            return View();
+        }
+
+
+
+ //=====================================================================================       //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)

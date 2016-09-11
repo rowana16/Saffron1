@@ -8,6 +8,7 @@
 <div class="container">
    @using (Html.BeginForm("Invite", "Households", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
    {
+     @Html.AntiForgeryToken()
        <div class="row">
            <div class="col-md-2">  Email  </div>
            <input class="form-control col-md-12d" type="email" name="email" />

@@ -30,10 +30,14 @@
             <div class="col-md-4">
                 <h2>Household Management</h2>
                 @Html.ActionLink("Leave Household", "Delete", "Households", new { id = currUser.HouseholdId }, new { @class = "btn btn-primary" })
-                <hr />
-                @Html.ActionLink("Invite Another User", "Invite", "Households", null, new {  @class = "btn btn-primary" })
-                <hr />
-                @Html.ActionLink("Change Household Name", "Edit", "Households", new { id = currUser.HouseholdId }, new {  @class = "btn btn-primary" })
+                
+                @if (currUser.HeadOfHousehold == true)
+                {
+                    <hr />
+                    @Html.ActionLink("Invite Another User", "Invite", "Households", null, new { @class = "btn btn-primary" })                
+                    <hr />
+                    @Html.ActionLink("Change Household Name", "Edit", "Households", new { id = currUser.HouseholdId }, new { @class = "btn btn-primary" })
+                }            
             </div>
         }
     }
