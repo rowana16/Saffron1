@@ -232,6 +232,8 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Budget.cs" />
     <Compile Include="Models\BudgetItem.cs" />
+    <Compile Include="Controllers\BudgetsController.cs" />
+    <Compile Include="Models\BudgetTransactionViewModel.cs" />
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\Invitee.cs" />
     <Compile Include="Models\Household.cs" />
@@ -258,6 +260,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Properties\PublishProfiles\arowan-budgeter.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -323,6 +326,12 @@
     <Content Include="Views\Transactions\Details.cshtml" />
     <Content Include="Views\Transactions\Edit.cshtml" />
     <Content Include="Views\Transactions\Index.cshtml" />
+    <Content Include="Views\Budgets\Create.cshtml" />
+    <Content Include="Views\Budgets\Delete.cshtml" />
+    <Content Include="Views\Budgets\Details.cshtml" />
+    <Content Include="Views\Budgets\Edit.cshtml" />
+    <Content Include="Views\Budgets\Index.cshtml" />
+    <Content Include="Views\Transactions\OverdraftWarning.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

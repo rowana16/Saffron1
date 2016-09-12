@@ -42,20 +42,23 @@ namespace Saffron1.Controllers
         // GET: Households/Create
         //public ActionResult Create()
         //{
-        //    return View();
+        //    Household newHousehold = new Household();
+
+            
         //}
 
-//============================== Create and Join Household ============================================================================
+        //============================== Create and Join Household ============================================================================
 
         // POST: Households/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name")] Household household)
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.        
+        
+        public ActionResult Create()
         {
+            Household household = new Household();
             ApplicationUser currUser = db.Users.Find(User.Identity.GetUserId());
             household.Users.Add(currUser);
+            household.Name = currUser.LastName;
 
             if (ModelState.IsValid)
             {
@@ -117,6 +120,12 @@ namespace Saffron1.Controllers
             {
                 return HttpNotFound();
             }
+            if (household.Users.Count > 1)
+            {
+                ViewBag.HouseholdMembers = new SelectList(household.Users, "Id", "DisplayName");
+                
+            }
+            
             return View(household);
         }
 
@@ -132,6 +141,7 @@ namespace Saffron1.Controllers
             ApplicationUser currUser = db.Users.Find(User.Identity.GetUserId());
             household.Users.Remove(currUser);
 
+            
             if (ModelState.IsValid)
             {
                 db.Entry(household).State = EntityState.Modified;
@@ -160,7 +170,7 @@ namespace Saffron1.Controllers
             SendGridMessage myMessage = new SendGridMessage();
             myMessage.AddTo(Email);
             myMessage.From = new System.Net.Mail.MailAddress("DoNotReply@Saffron1.com");
-            myMessage.Subject = "An Invitation From Saffron1";
+            myMessage.Subject = "An Invitation From Saffron1: Budgeting and Financial Management";
            
 
             newInvitee.Email = Email;
@@ -172,8 +182,8 @@ namespace Saffron1.Controllers
             {
                 db.Invitee.Add(newInvitee);
                 db.SaveChanges();
-                int Id = newInvitee.Id;
-                myMessage.Html = "You have been invited to join a household.  Click this link to Register and Join: http://arowan-budgeter.azurewebsites.net/Account/ExternalRegister/" + Id ;
+                int Id = newInvitee.Id;                                                                         
+                myMessage.Html = "You have been invited to join " + currUser.DisplayName + "'s household.  Click this link to Register and Join: <a href = \"http://arowan-budgeter.azurewebsites.net/Account/ExternalRegister/ " + Id + "\"> Join the Household </a>";
                 var transportWeb = new Web(ConfigurationManager.AppSettings["SendGridAPIKey"]);
                 transportWeb.DeliverAsync(myMessage);
                 return RedirectToAction("Index", "Home");

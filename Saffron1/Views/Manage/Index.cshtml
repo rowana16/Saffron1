@@ -9,6 +9,7 @@
 }
 
 <h2>@ViewBag.Title.</h2>
+<h3>Update your details</h3>
 
 <hr />
 
@@ -23,12 +24,18 @@
 
     @using (Html.BeginForm("Index", "Manage", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
+        @Html.AntiForgeryToken()
         <div class="col-md-4"> First Name: </div>
         <div class="col-md-8"><input type="text" name="FirstName" value="@currUser.FirstName" /> </div>
         <div class="col-md-4"> Last Name: </div>
         <div class="col-md-8"><input type="text" name="LastName" value="@currUser.LastName" /> </div>
+        <div class="col-md-4"> Email: </div>
+        <div class="col-md-8"><input type="text" name="Email" value="@currUser.Email" /></div>
+
 
         <input type="submit" value="Update Details" class="btn btn-primary" />
     }
+
+    @Html.ActionLink("Change Password","ChangePassword",null, new { @class = "btn btn-primary"})
   
 </div>

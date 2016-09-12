@@ -77,6 +77,7 @@ namespace Saffron1.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Index (string FirstName, string LastName)
         {
             var updateUser = await UserManager.FindByIdAsync(User.Identity.GetUserId());

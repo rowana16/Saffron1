@@ -16,8 +16,10 @@
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Leave Household" class="btn btn-default" /> |
+        <div class="form-actions">
+            <h4>Select User to be Head Of Household:</h4>
+            @Html.DropDownList("HouseholdMembers",null , htmlAttributes: new { @class = "form-control" })
+            <input type="submit" value="Leave Household" class="btn btn-primary" /> |
             @Html.ActionLink("Back to List", "Index", "Home")
         </div>
     }

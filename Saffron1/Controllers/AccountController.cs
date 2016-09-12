@@ -161,7 +161,7 @@ namespace Saffron1.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(string FirstName, string LastName, string Email, string Password, int InviteeId, int HouseholdId)
+        public async Task<ActionResult> Register(string FirstName, string LastName, string Email, string Password)
         {
             
             var user = new ApplicationUser { FirstName = FirstName, LastName = LastName, DisplayName = FirstName + " " + LastName,  Email = Email , UserName = Email, HeadOfHousehold = true };
@@ -209,7 +209,6 @@ namespace Saffron1.Controllers
 
                     db.Entry(currInvitee).State = EntityState.Modified;
                     db.SaveChanges();
-
 
                     return RedirectToAction("Index", "Home");
                 }
