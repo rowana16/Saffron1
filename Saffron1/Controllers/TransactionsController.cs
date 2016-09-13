@@ -103,7 +103,7 @@ namespace Saffron1.Controllers
             return View(transaction);
         }
 
-        //============================================ GET: Edit ========================================================================
+        //============================================ Overdraft ========================================================================
 
         public ActionResult OverdraftWarning()
         {
@@ -145,7 +145,7 @@ namespace Saffron1.Controllers
             {
                 Transaction originalTransaction = db.Transaction.Find(transaction.Id);
                 bool overdraft = BalanceChangeCheck(transaction, originalTransaction);
-                db.Entry(transaction).State = EntityState.Modified;
+                db.Entry(originalTransaction).CurrentValues.SetValues(transaction);
                 db.SaveChanges();
 
                 if (overdraft)
@@ -160,23 +160,7 @@ namespace Saffron1.Controllers
             return View(transaction);
         }
 
-        public bool BalanceChangeCheck(Transaction transaction, Transaction originalTransaction)
-        {
-            if(transaction.Amount != originalTransaction.Amount)
-            {
-                bool overdraft = ChangeTransactionAmount(originalTransaction, transaction.Amount);
-                return overdraft;
-            } 
-
-            if(transaction.TypeTransactionId != originalTransaction.Amount)
-            {
-                bool overdraft = ChangeTransactionType(originalTransaction, transaction.TypeTransactionId);
-                return overdraft;
-            }
-
-            return false;
-
-        }
+        
 
         //============================================ Delete: Edit ========================================================================
 
@@ -213,13 +197,17 @@ namespace Saffron1.Controllers
 
         //============================================ Helper Functions ========================================================================
 
-        public void DepositFunds(float amount, int accountId, bool reconciled)
+        //============================================ Write Functions ========================================================================
+        public bool DepositFunds(float amount, int accountId, bool reconciled)
         {
             Account currAccount = db.Account.Find(accountId);
             currAccount.Balance = currAccount.Balance + amount;
             if (reconciled) { currAccount.ReconciledBalance += amount; }
             db.Entry(currAccount).State = EntityState.Modified;
             db.SaveChanges();
+
+            if(currAccount.Balance < 0) { return true; }
+            else { return false; }
         }
 
         public bool WithdrawFunds(float amount, int accountId, bool reconciled)
@@ -234,12 +222,14 @@ namespace Saffron1.Controllers
             else { return false; }
         }
 
+        //============================================ Sorting Operation ========================================================================
+
         public bool UpdateBalances(Transaction transaction)
         {
             if (transaction.TypeTransactionId == 1 || transaction.TypeTransactionId == 4)
             {
-                DepositFunds(transaction.Amount, transaction.AccountId, transaction.Reconciled);
-                return false;
+                bool overdraft = DepositFunds(transaction.Amount, transaction.AccountId, transaction.Reconciled);
+                return overdraft;
             }
             if (transaction.TypeTransactionId == 2 || transaction.TypeTransactionId == 3)
             {
@@ -250,12 +240,16 @@ namespace Saffron1.Controllers
             return false;
         }
 
+        //============================================ Delete ========================================================================
+
         public bool BackOutTransaction (Transaction backOutTransaction)
         {
             backOutTransaction.Amount *= -1;
             bool overdraft = UpdateBalances(backOutTransaction);
             return overdraft;
         }
+
+        //============================================ Edit Amount ========================================================================
 
         public bool ChangeTransactionAmount (Transaction deltaTransaction, float newAmount)
         {
@@ -266,13 +260,44 @@ namespace Saffron1.Controllers
 
         }
 
+        //============================================ Edit Type ========================================================================
+
         public bool ChangeTransactionType (Transaction deltaTransaction, int newType)
         {
-            BackOutTransaction(deltaTransaction);
+            Transaction backOutTransaction = new Transaction();
+            backOutTransaction.AccountId = deltaTransaction.AccountId;
+            backOutTransaction.Amount = deltaTransaction.Amount;
+            backOutTransaction.Reconciled = deltaTransaction.Reconciled;
+            backOutTransaction.TypeTransactionId = deltaTransaction.TypeTransactionId;
+            
+            BackOutTransaction(backOutTransaction);
+
             deltaTransaction.TypeTransactionId = newType;
             bool overdraft = UpdateBalances(deltaTransaction);
             return overdraft;
         }
+
+        //============================================ Sorting by Change Type ========================================================================
+
+        public bool BalanceChangeCheck(Transaction transaction, Transaction originalTransaction)
+        {
+            if (transaction.Amount != originalTransaction.Amount)
+            {
+                bool overdraft = ChangeTransactionAmount(originalTransaction, transaction.Amount);
+                return overdraft;
+            }
+
+            if (transaction.TypeTransactionId != originalTransaction.TypeTransactionId)
+            {
+                bool overdraft = ChangeTransactionType(originalTransaction, transaction.TypeTransactionId);
+                return overdraft;
+            }
+
+            return false;
+
+        }
+
+        //============================================ Garbage ========================================================================
 
         protected override void Dispose(bool disposing)
         {
