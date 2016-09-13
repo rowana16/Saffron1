@@ -19,23 +19,32 @@ namespace Saffron1.Controllers
         public ActionResult Index()
         {
             ApplicationUser currUser = db.Users.Find(User.Identity.GetUserId());
-            
-            return View(currUser.Household.Accounts.ToList());
+            AccountViewModel viewModel = new AccountViewModel();
+            viewModel.Accounts = currUser.Household.Accounts.ToList();
+            viewModel.Types = db.AccountType.ToList();
+
+
+            return View(viewModel);
         }
 
         // GET: BankAccounts/Details/5
         public ActionResult Details(int? id)
         {
+            AccountDetailViewModel viewModel = new AccountDetailViewModel();
+
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Account account = db.Account.Find(id);
-            if (account == null)
+
+            viewModel.Account = db.Account.Find(id);
+            viewModel.Transactions = db.Transaction.Where(db => db.AccountId == viewModel.Account.Id).ToList();
+
+            if (viewModel.Account == null)
             {
                 return HttpNotFound();
             }
-            return View(account);
+            return View(viewModel);
         }
 
         // GET: BankAccounts/Create

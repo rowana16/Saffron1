@@ -18,8 +18,13 @@ namespace Saffron1.Models
         public ActionResult Index()
         {
             ApplicationUser currUser = db.Users.Find(User.Identity.GetUserId());
-            var budget = currUser.Household.Budgets;
-            return View(budget.ToList());
+            BudgetTransactionViewModel viewModel = new BudgetTransactionViewModel();
+
+            viewModel.Budgets = currUser.Household.Budgets.ToList();
+            viewModel.BudgetItems = db.BudgetItem.Where(o => o.Budget.HouseholdId == currUser.HouseholdId).ToList();
+            viewModel.Transactions = db.Transaction.Where(o => o.Account.HouseholdId == currUser.HouseholdId).ToList();
+
+            return View(viewModel);
         }
 
         // GET: Budgets/Details/5

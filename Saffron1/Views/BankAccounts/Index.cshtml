@@ -1,63 +1,20 @@
-﻿@model IEnumerable<Saffron1.Models.Account>
-
+﻿@using Saffron1.Models
+@model AccountViewModel
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Account Overview</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Household.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Balance)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ReconciledBalance)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.InstitutionId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AccountTypeId)
-        </th>
-        <th></th>
-    </tr>
+@foreach(var type in Model.Types)
+{
+    <h3>@type.Name</h3>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Household.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Balance)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ReconciledBalance)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.InstitutionId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AccountTypeId)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
+    foreach(var account in Model.Accounts)
+    {
+        if(account.AccountTypeId == type.ID)
+        {
+            <h4>@Html.ActionLink(@account.Institution.Name + "  " + account.Balance, "Details", new { id = @account.Id } )   </h4>
+        }
+    }
 }
-
-</table>

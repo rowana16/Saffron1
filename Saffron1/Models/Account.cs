@@ -16,8 +16,11 @@ namespace Saffron1.Models
         public int HouseholdId { get; set; }
         public int InstitutionId { get; set; }
         public int AccountTypeId { get; set; }
+
         //one to one relationships
         public virtual Household Household { get; set; }
+        public virtual Institution Institution { get; set; }
+        public virtual AccountType AccountType { get; set; }
 
         //one to many and many to many relationships
         public Account()

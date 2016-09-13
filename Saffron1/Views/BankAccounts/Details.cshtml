@@ -1,66 +1,20 @@
-﻿@model Saffron1.Models.Account
+﻿@using Saffron1.Models
+@model AccountDetailViewModel
 
 @{
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+<h2>@Model.Account.Institution.Name  -  @Model.Account.AccountType.Name  </h2>
 
-<div>
-    <h4>Account</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Household.Name)
-        </dt>
+@foreach(var transaction in Model.Transactions)
+{
+    <h3>@transaction.Category.Name  || @transaction.Amount || @transaction.Type.Name || @transaction.Date </h3>
+}
 
-        <dd>
-            @Html.DisplayFor(model => model.Household.Name)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Balance)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Balance)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ReconciledBalance)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ReconciledBalance)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.InstitutionId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.InstitutionId)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.AccountTypeId)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AccountTypeId)
-        </dd>
-
-    </dl>
-</div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Account.Id}) |
     @Html.ActionLink("Back to List", "Index")
 </p>

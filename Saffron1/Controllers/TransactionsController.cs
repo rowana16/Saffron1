@@ -187,6 +187,8 @@ namespace Saffron1.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Transaction transaction = db.Transaction.Find(id);
+            BackOutTransaction(transaction);
+
             db.Transaction.Remove(transaction);
             db.SaveChanges();
             return RedirectToAction("Index");
@@ -246,6 +248,7 @@ namespace Saffron1.Controllers
         {
             backOutTransaction.Amount *= -1;
             bool overdraft = UpdateBalances(backOutTransaction);
+            backOutTransaction.Amount *= -1;
             return overdraft;
         }
 
@@ -264,13 +267,13 @@ namespace Saffron1.Controllers
 
         public bool ChangeTransactionType (Transaction deltaTransaction, int newType)
         {
-            Transaction backOutTransaction = new Transaction();
-            backOutTransaction.AccountId = deltaTransaction.AccountId;
-            backOutTransaction.Amount = deltaTransaction.Amount;
-            backOutTransaction.Reconciled = deltaTransaction.Reconciled;
-            backOutTransaction.TypeTransactionId = deltaTransaction.TypeTransactionId;
+            //Transaction backOutTransaction = new Transaction();
+            //backOutTransaction.AccountId = deltaTransaction.AccountId;
+            //backOutTransaction.Amount = deltaTransaction.Amount;
+            //backOutTransaction.Reconciled = deltaTransaction.Reconciled;
+            //backOutTransaction.TypeTransactionId = deltaTransaction.TypeTransactionId;
             
-            BackOutTransaction(backOutTransaction);
+            BackOutTransaction(deltaTransaction);
 
             deltaTransaction.TypeTransactionId = newType;
             bool overdraft = UpdateBalances(deltaTransaction);
@@ -292,6 +295,8 @@ namespace Saffron1.Controllers
                 bool overdraft = ChangeTransactionType(originalTransaction, transaction.TypeTransactionId);
                 return overdraft;
             }
+
+            
 
             return false;
 
