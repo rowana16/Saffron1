@@ -1,29 +1,257 @@
-﻿<nav class="navbar-default navbar-static-side" role="navigation">
-    <div class="sidebar-collapse">
+﻿@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+@using Saffron1.Models
+@if (Request.IsAuthenticated)
+{
+    var Manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+    var currUser = Manager.FindById(User.Identity.GetUserId());
+    string displayName;
+
+    if (String.Empty == currUser.DisplayName || currUser.DisplayName == null)
+    {
+        displayName = currUser.Email;
+    }
+    else { displayName = currUser.DisplayName; }
+
+    ViewBag.displayName = displayName;
+    ViewBag.currUser = currUser;
+    ViewBag.Accounts = currUser.Household.Accounts.ToList();
+}
+
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="">
         <ul class="nav" id="side-menu">
             <li class="nav-header">
                 <div class="dropdown profile-element">
                     <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                         <span class="clear">
                             <span class="block m-t-xs">
-                                <strong class="font-bold">Example user</strong>
-                            </span> <span class="text-muted text-xs block">Example menu <b class="caret"></b></span>
+                                <strong class="font-bold">@ViewBag.displayName </strong>
+                            </span> <span class="text-muted text-xs block"><i class="fa fa-gear"></i> <b class="caret"></b></span>
                         </span>
                     </a>
                     <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                        <li><a href="#">Logout</a></li>
+                        <li>@Html.ActionLink("My Account", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })</li>
+                        <li>@Html.ActionLink("Change Password", "ChangePassword", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" }) </li>
+                        @if (ViewBag.currUser != null)
+                        {
+                            if (ViewBag.currUser.HeadOfHousehold)
+                            {
+                                <li>@Html.ActionLink("Manage Household", "Index", "Households", null, new { title = "Manage" })</li>
+                            }
+                        }
                     </ul>
                 </div>
-                <div class="logo-element">
-                    IN+
-                </div>
             </li>
-            <li class="@Html.IsSelected(action: "Index")">
-                <a href="@Url.Action("Index", "Home")"><i class="fa fa-laptop"></i> <span class="nav-label">Main page</span> </a>
-            </li>
-            <li class="@Html.IsSelected(action: "Minor")">
-                <a href="@Url.Action("Minor", "Home")"><i class="fa fa-desktop"></i> <span class="nav-label">Minor page</span></a>
-            </li>
+            <!---------Main Panel---------->
+
+            @if (ViewBag.currUser != null)
+            {
+                <li class="@Html.IsSelected(action: "Index")">
+                    <a href="@Url.Action("Index", "Home")"><i class="fa fa-dollar"></i> <span class="nav-label">Savings Accounts</span> </a>
+                    <ul>
+                        @foreach (var account in ViewBag.Accounts)
+                        {
+                            if (account.AccountTypeId == 2)
+                            {
+                                <li>
+                                    <h3>@Html.ActionLink((string)@account.Institution.Name, "Details", "BankAccounts", new { id = @account.Id }, null)</h3>
+                                    <h5> Balance = $@account.Balance</h5>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                </li>
+                <li class="@Html.IsSelected(action: "Index")">
+                    <a href="@Url.Action("Index", "Home")"><i class="fa fa-check-circle"></i> <span class="nav-label">Checking Accounts</span> </a>
+                    <ul>
+                        @foreach (var account in ViewBag.Accounts)
+                        {
+                            if (account.AccountTypeId == 1)
+                            {
+                                <li>
+                                    <h3>@Html.ActionLink((string)@account.Institution.Name, "Details", "BankAccounts", new { id = @account.Id }, null)</h3>
+                                    <h5> Balance = $@account.Balance</h5>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                </li>
+                <li class="@Html.IsSelected(action: "Index")">
+                    <a href="@Url.Action("Index", "Home")"><i class="fa fa-credit-card"></i> <span class="nav-label">Credit Cards</span> </a>
+                    <ul>
+                        @foreach (var account in ViewBag.Accounts)
+                        {
+                            if (account.AccountTypeId == 5)
+                            {
+                                <li>
+                                    <h3>@Html.ActionLink((string)@account.Institution.Name, "Details", "BankAccounts", new { id = @account.Id }, null)</h3>
+                                    <h5> Balance = $@account.Balance</h5>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                </li>
+                <li></li>
+                <li class="@Html.IsSelected(action: "Index")">
+                    <a href="@Url.Action("Index", "Home")"><i class="fa fa-institution"></i> <span class="nav-label">Money Market</span> </a>
+                    <ul>
+                        @foreach (var account in ViewBag.Accounts)
+                        {
+                            if (account.AccountTypeId == 3)
+                            {
+                                <li>
+                                    <h3>@Html.ActionLink((string)@account.Institution.Name, "Details", "BankAccounts", new { id = @account.Id }, null)</h3>
+                                    <h5> Balance = $@account.Balance</h5>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                </li>
+                <li class="@Html.IsSelected(action: "Index")">
+                    <a href="@Url.Action("Index", "Home")"><i class="fa fa-certificate"></i> <span class="nav-label">Cert. Deposit</span> </a>
+                    <ul>
+                        @foreach (var account in ViewBag.Accounts)
+                        {
+                            if (account.AccountTypeId == 6)
+                            {
+                                <li>
+                                    <h3>@Html.ActionLink((string)@account.Institution.Name, "Details", "BankAccounts", new { id = @account.Id }, null)</h3>
+                                    <h5> Balance = $@account.Balance</h5>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                </li>
+                <li class="@Html.IsSelected(action: "Index")">
+                    <a href="@Url.Action("Index", "Home")"><i class="fa fa-line-chart"></i> <span class="nav-label">Investment</span> </a>
+                    <ul>
+                        @foreach (var account in ViewBag.Accounts)
+                        {
+                            if (account.AccountTypeId == 4)
+                            {
+                                <li>
+                                    <h3>@Html.ActionLink((string)@account.Institution.Name, "Details", "BankAccounts", new { id = @account.Id }, null)</h3>
+                                    <h5> Balance = $@account.Balance</h5>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                </li>
+                <li class="@Html.IsSelected(action: "Index")">
+                    <a href="@Url.Action("Index", "Home")"><i class="fa fa-pie-chart"></i> <span class="nav-label">Insurance</span> </a>
+                    <ul>
+                        @foreach (var account in ViewBag.Accounts)
+                        {
+                            if (account.AccountTypeId == 7)
+                            {
+                                <li>
+                                    <h3>@Html.ActionLink((string)@account.Institution.Name, "Details", "BankAccounts", new { id = @account.Id }, null)</h3>
+                                    <h5> Balance = $@account.Balance</h5>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                </li>
+                @*<li class="@Html.IsSelected(action: "Minor")">
+                    <a href="@Url.Action("Minor", "Home")"><i class="fa fa-check-circle" <span class="nav-label">Checking Account</span></a>
+                    <ul>
+                        @foreach (var account in ViewBag.Accounts)
+                        {
+                            if (account.AccountTypeId == 1)
+                            {
+                                <li>
+                                    <h3>@Html.ActionLink((string)@account.Institution.Name, "Details", "BankAccounts", new { id = @account.Id })</h3>
+                                    <h5> Balance = $@account.Balance</h5>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </li>*@
+                @*<li class="@Html.IsSelected(action: "Minor")">
+                    <a href="@Url.Action("Minor", "Home")"><i class="fa fa-pie-chart"></i> <span class="nav-label">Money Market</span></a>
+                    <ul>
+                        @foreach (var account in ViewBag.Accounts)
+                        {
+                            if (account.AccountTypeId == 3)
+                            {
+                                <li>
+                                    <h4>@Html.ActionLink((string)@account.Institution.Name, "Details", "BankAccounts", new { id = @account.Id })</h4>
+                                    <h3> Balance = $@account.Balance</h3>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </li>
+                <li class="@Html.IsSelected(action: "Minor")">
+                    <a href="@Url.Action("Minor", "Home")"><i class="fa fa-line-chart"></i> <span class="nav-label">Investment</span></a>
+                    <ul>
+                        @foreach (var account in ViewBag.Accounts)
+                        {
+                            if (account.AccountTypeId == 4)
+                            {
+                                <li>
+                                    <h4>@Html.ActionLink((string)@account.Institution.Name, "Details", "BankAccounts", new { id = @account.Id })</h4>
+                                    <h3> Balance = $@account.Balance</h3>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </li>
+                <li class="@Html.IsSelected(action: "Minor")">
+                    <a href="@Url.Action("Minor", "Home")"><i class="fa fa-check-circle"></i> <span class="nav-label">Credit Card</span></a>
+                    <ul>
+                        @foreach (var account in ViewBag.Accounts)
+                        {
+                            if (account.AccountTypeId == 5)
+                            {
+                                <li>
+                                    <h4>@Html.ActionLink((string)@account.Institution.Name, "Details", "BankAccounts", new { id = @account.Id })</h4>
+                                    <h3> Balance = $@account.Balance</h3>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </li>*@
+                @*<li class="@Html.IsSelected(action: "Minor")">
+                    <a href="@Url.Action("Minor", "Home")"><i class="fa fa-check-circle"></i> <span class="nav-label">Cert. Deposit</span></a>
+                    <ul>
+                        @foreach (var account in ViewBag.Accounts)
+                        {
+                            if (account.AccountTypeId == 6)
+                            {
+                                <li>
+                                    <h4>@Html.ActionLink((string)@account.Institution.Name, "Details", "BankAccounts", new { id = @account.Id })</h4>
+                                    <h3> Balance = $@account.Balance</h3>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </li>
+                <li class="@Html.IsSelected(action: "Minor")">
+                    <a href="@Url.Action("Minor", "Home")"><i class="fa fa-check-circle"></i> <span class="nav-label">Insurance</span></a>
+                    <ul>
+                        @foreach (var account in ViewBag.Accounts)
+                        {
+                            if (account.AccountTypeId == 7)
+                            {
+                                <li>
+                                    <h4>@Html.ActionLink((string)@account.Institution.Name, "Details", "BankAccounts", new { id = @account.Id })</h4>
+                                    <h3> Balance = $@account.Balance</h3>
+                                </li>
+                            }
+                        }
+                    </ul>
+                </li>*@
+
+            }
         </ul>
     </div>
 </nav>

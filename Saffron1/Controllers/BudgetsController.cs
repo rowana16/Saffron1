@@ -24,6 +24,11 @@ namespace Saffron1.Models
             viewModel.BudgetItems = db.BudgetItem.Where(o => o.Budget.HouseholdId == currUser.HouseholdId).ToList();
             viewModel.Transactions = db.Transaction.Where(o => o.Account.HouseholdId == currUser.HouseholdId).ToList();
 
+            foreach(BudgetItem currItem in viewModel.BudgetItems)
+            {
+
+            }
+
             return View(viewModel);
         }
 

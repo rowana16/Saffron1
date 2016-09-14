@@ -20,8 +20,12 @@ namespace Saffron1.Controllers
         {
             ApplicationUser currUser = db.Users.Find(User.Identity.GetUserId());
             AccountViewModel viewModel = new AccountViewModel();
-            viewModel.Accounts = currUser.Household.Accounts.ToList();
-            viewModel.Types = db.AccountType.ToList();
+            if(currUser != null)
+            {
+                viewModel.Accounts = currUser.Household.Accounts.ToList();
+                viewModel.Types = db.AccountType.ToList();
+            }
+            
 
 
             return View(viewModel);

@@ -1,33 +1,37 @@
-﻿@model IEnumerable<Saffron1.Models.Household>
+﻿@using Microsoft.AspNet.Identity
+@using Microsoft.AspNet.Identity.EntityFramework
+@using Saffron1.Models
 
-@{
-    ViewBag.Title = "Index";
+@{  
+    var Manager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext()));
+    var currUser = Manager.FindById(User.Identity.GetUserId());
 }
 
-<h2>Index</h2>
+<h2>Manage Household</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th></th>
-    </tr>
+@if (currUser != null)
+{
+    if (currUser.HouseholdId == null)
+    {
+        <div class="col-md-4">
+            <h2>Household Management</h2>
+            @Html.ActionLink("Create a New Household", "Create", "Households", null, new { @class = "btn btn-primary" })
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
+        </div>
+    }
+    if (currUser.HouseholdId != null)
+    {
+        <div class="col-md-4">
+            <h2>Household Management</h2>
+            @Html.ActionLink("Leave Household", "Delete", "Households", new { id = currUser.HouseholdId }, new { @class = "btn btn-primary" })
+
+            @if (currUser.HeadOfHousehold == true)
+            {
+                <hr />
+                    @Html.ActionLink("Invite Another User", "Invite", "Households", null, new { @class = "btn btn-primary" })
+                    <hr />
+                    @Html.ActionLink("Change Household Name", "Edit", "Households", new { id = currUser.HouseholdId }, new { @class = "btn btn-primary" })
+            }
+        </div>
+    }
 }
-
-</table>

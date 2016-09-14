@@ -11,6 +11,9 @@ namespace Saffron1
     {
         public static string IsSelected(this HtmlHelper html, string controller = null, string action = null, string cssClass = null)
         {
+            controller = null;
+            action = null;
+            cssClass = null;
 
             if (String.IsNullOrEmpty(cssClass))
                 cssClass = "active";
