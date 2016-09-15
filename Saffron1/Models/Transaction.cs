@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace Saffron1.Models
 {
@@ -26,11 +27,12 @@ namespace Saffron1.Models
         public virtual Account Account { get; set; }
         public virtual TypeTransaction Type { get; set; }
         public virtual Category Category { get; set; }
-        public virtual ApplicationUser EnteredUser { get; set; }
-        public virtual ApplicationUser _EnteredUser { get; set; }
+        public virtual ApplicationUser Enteredby { get; set; }
+        public virtual ApplicationUser Enteredby_ { get; set; }
 
 
 
         //one to many and many to many relationships
-    }
+    }  
+    
 }

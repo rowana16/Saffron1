@@ -8,6 +8,9 @@
 
 $(document).ready(function () {
 
+    $('.myTable').DataTable();
+    $(".pickdate").datepicker({ dateFormat: 'mm/dd/yy' });
+
 
     // Add body-small class if window less than 768px
     if ($(this).width() < 769) {

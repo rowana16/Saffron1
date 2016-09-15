@@ -18,22 +18,73 @@ namespace Saffron1.Controllers
         // GET: Transactions
         public ActionResult Index()
         {
+            TransactionViewModel viewModel = new TransactionViewModel();
             ApplicationUser currUser = db.Users.Find(User.Identity.GetUserId());
-            List<Transaction> allTransactions = db.Transaction.ToList();
-            List<Transaction> currTransactions = new List<Transaction>();
-            foreach (var currTransaction in allTransactions)
+            List<Transaction> currTransactions = GetTransactions(currUser);
+            List<AccountKey> AccountDisplay = GetAccountDisplay(currUser);
+
+            //foreach (var currTransaction in allTransactions)
+            //{
+            //    if (currTransaction.Account.HouseholdId == currUser.HouseholdId)
+            //    {
+            //        Transaction currKey = new Transaction();
+            //        currKey.InstitutionName = currTransaction.Account.Institution.Name + " " + currTransaction.Account.AccountType.Name;
+            //        currKey.Category.Name = currTransaction.Category.Name;
+            //        currKey.Type.Name = currTransaction.Type.Name;
+            //        currKey.Date = currTransaction.Date;
+            //        currKey.Amount = currTransaction.Amount;
+
+            //        currTransactions.Add(currKey);
+            //    }
+            //}
+
+
+            viewModel.currTransactions = currTransactions;
+            viewModel.AccountId = new SelectList(AccountDisplay, "Id", "InstitutionName");
+            viewModel.CategoryId = new SelectList(db.Category, "Id", "Name");
+            viewModel.TypeTransactionId = new SelectList(db.TypeTransaction, "Id", "Name");
+            return View(viewModel);
+
+        }
+
+        // =========================  HelperFunctions ===========================================
+
+        public List<AccountKey> GetAccountDisplay (ApplicationUser currUser)
+        {
+            //List<AccountKey> AccountDisplay = currUser.Household.Accounts.ToList();
+            List<AccountKey> AccountDisplay = new List<AccountKey>();
+            foreach (var account in currUser.Household.Accounts)
             {
-                if (currTransaction.Account.HouseholdId == currUser.HouseholdId)
-                {
-                    currTransactions.Add(currTransaction);
-                }
+                AccountKey currKey = new AccountKey();
+                currKey.Id = account.Id;
+                currKey.InstitutionName = account.Institution.Name + " " + account.AccountType.Name;
+                AccountDisplay.Add(currKey);
             }
 
+            return AccountDisplay;
 
+        }
 
+        public List<Transaction> GetTransactions(ApplicationUser currUser)
+        {
+            List<Transaction> allTransactions = db.Transaction.Where(i => i.Account.HouseholdId == currUser.HouseholdId).ToList();
+            //List<Transaction> currTransactions = new List<Transaction>();
+            //foreach (var currTransaction in allTransactions)
+            //{
 
-            return View(currTransactions);
+            //    if (currTransaction.Account.HouseholdId == currUser.HouseholdId)
+            //    {
+            //        Transaction currKey = new Transaction();
+            //        currKey.InstitutionName = currTransaction.Account.Institution.Name + " " + currTransaction.Account.AccountType.Name;
+            //        currKey.Category.Name = currTransaction.Category.Name;
+            //        currKey.Type.Name = currTransaction.Type.Name;
+            //        currKey.Date = currTransaction.Date;
+            //        currKey.Amount = currTransaction.Amount;
 
+            //        currTransactions.Add(currKey);
+            //    }
+            //}
+            return allTransactions;
         }
 
         // GET: Transactions/Details/5
