@@ -9,6 +9,14 @@
     <title>Rowan | @ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Styles.Render("~/font-awesome/css")
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/plugins/metsiMenu")
+    @Scripts.Render("~/plugins/pace")
+    @Scripts.Render("~/plugins/slimScroll")
+    @Scripts.Render("~/bundles/inspinia")
+    @RenderSection("scripts", required: false)
     
 </head>
 <body>
@@ -37,13 +45,7 @@
     </div>
     <!-- End wrapper-->
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/plugins/metsiMenu")
-    @Scripts.Render("~/plugins/pace")
-    @Scripts.Render("~/plugins/slimScroll")
-    @Scripts.Render("~/bundles/inspinia")
-    @RenderSection("scripts", required: false)
+    
 </body>
 </html>
 

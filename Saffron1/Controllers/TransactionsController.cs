@@ -20,6 +20,7 @@ namespace Saffron1.Controllers
         {
             TransactionViewModel viewModel = new TransactionViewModel();
             ApplicationUser currUser = db.Users.Find(User.Identity.GetUserId());
+            if (currUser == null) { return RedirectToAction("Login", "Account"); }
             List<Transaction> currTransactions = GetTransactions(currUser);
             List<AccountKey> AccountDisplay = GetAccountDisplay(currUser);
 

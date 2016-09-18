@@ -25,14 +25,18 @@ namespace Saffron1
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+                      "~/Content/site.css",
+                      "~/Content/chartist.min.css"));
 
 
             // Vendor scripts
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-2.1.1.min.js",
                         "~/Scripts/DataTables/jquery.DataTables.min.js",
-                        "~/Scripts/jquery-ui.min.js"));
+                        "~/Scripts/jquery-ui.min.js",
+                        "~/Scripts/chartist.min.js",
+                        "~/Scripts/chartists.min.js.map"
+                        ));
 
             // jQuery Validation
             bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
@@ -62,7 +66,8 @@ namespace Saffron1
                       "~/Content/DataTables/css/jquery.dataTables.min.css",
                       "~/Content/jquery-ui.min.css",
                       "~/Content/animate.css",
-                      "~/Content/style.css"));
+                      "~/Content/style.css",
+                      "~/Content/site.css"));
 
             // Font Awesome icons
             bundles.Add(new StyleBundle("~/font-awesome/css").Include(

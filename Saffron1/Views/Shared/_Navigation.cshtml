@@ -47,13 +47,16 @@
 
             @if (ViewBag.currUser != null)
             {
+                <li>
+                <i class="fa fa-plus btn btn-warning" href ="/BankAccounts/Create/">   Create New Account</i>
+                </li>
                 <li class="@Html.IsSelected(action: "Index")">
                     <a href="@Url.Action("Index", "Home")"><i class="fa fa-dollar"></i> <span class="nav-label">Savings Accounts</span> </a>
                     <ul>
                         @foreach (var account in ViewBag.Accounts)
-                        {
-                            if (account.AccountTypeId == 2)
-                            {
+                {
+                    if (account.AccountTypeId == 2)
+                    {
                                 <li>
                                     <h3>@Html.ActionLink((string)@account.Institution.Name, "Details", "BankAccounts", new { id = @account.Id }, null)</h3>
                                     <h5> Balance = $@account.Balance</h5>
@@ -67,9 +70,9 @@
                     <a href="@Url.Action("Index", "Home")"><i class="fa fa-check-circle"></i> <span class="nav-label">Checking Accounts</span> </a>
                     <ul>
                         @foreach (var account in ViewBag.Accounts)
-                        {
-                            if (account.AccountTypeId == 1)
-                            {
+                {
+                    if (account.AccountTypeId == 1)
+                    {
                                 <li>
                                     <h3>@Html.ActionLink((string)@account.Institution.Name, "Details", "BankAccounts", new { id = @account.Id }, null)</h3>
                                     <h5> Balance = $@account.Balance</h5>
@@ -83,9 +86,9 @@
                     <a href="@Url.Action("Index", "Home")"><i class="fa fa-credit-card"></i> <span class="nav-label">Credit Cards</span> </a>
                     <ul>
                         @foreach (var account in ViewBag.Accounts)
-                        {
-                            if (account.AccountTypeId == 5)
-                            {
+                {
+                    if (account.AccountTypeId == 5)
+                    {
                                 <li>
                                     <h3>@Html.ActionLink((string)@account.Institution.Name, "Details", "BankAccounts", new { id = @account.Id }, null)</h3>
                                     <h5> Balance = $@account.Balance</h5>
@@ -100,9 +103,9 @@
                     <a href="@Url.Action("Index", "Home")"><i class="fa fa-institution"></i> <span class="nav-label">Money Market</span> </a>
                     <ul>
                         @foreach (var account in ViewBag.Accounts)
-                        {
-                            if (account.AccountTypeId == 3)
-                            {
+                {
+                    if (account.AccountTypeId == 3)
+                    {
                                 <li>
                                     <h3>@Html.ActionLink((string)@account.Institution.Name, "Details", "BankAccounts", new { id = @account.Id }, null)</h3>
                                     <h5> Balance = $@account.Balance</h5>
@@ -116,9 +119,9 @@
                     <a href="@Url.Action("Index", "Home")"><i class="fa fa-certificate"></i> <span class="nav-label">Cert. Deposit</span> </a>
                     <ul>
                         @foreach (var account in ViewBag.Accounts)
-                        {
-                            if (account.AccountTypeId == 6)
-                            {
+                {
+                    if (account.AccountTypeId == 6)
+                    {
                                 <li>
                                     <h3>@Html.ActionLink((string)@account.Institution.Name, "Details", "BankAccounts", new { id = @account.Id }, null)</h3>
                                     <h5> Balance = $@account.Balance</h5>
@@ -132,9 +135,9 @@
                     <a href="@Url.Action("Index", "Home")"><i class="fa fa-line-chart"></i> <span class="nav-label">Investment</span> </a>
                     <ul>
                         @foreach (var account in ViewBag.Accounts)
-                        {
-                            if (account.AccountTypeId == 4)
-                            {
+                {
+                    if (account.AccountTypeId == 4)
+                    {
                                 <li>
                                     <h3>@Html.ActionLink((string)@account.Institution.Name, "Details", "BankAccounts", new { id = @account.Id }, null)</h3>
                                     <h5> Balance = $@account.Balance</h5>
@@ -148,9 +151,9 @@
                     <a href="@Url.Action("Index", "Home")"><i class="fa fa-pie-chart"></i> <span class="nav-label">Insurance</span> </a>
                     <ul>
                         @foreach (var account in ViewBag.Accounts)
-                        {
-                            if (account.AccountTypeId == 7)
-                            {
+                {
+                    if (account.AccountTypeId == 7)
+                    {
                                 <li>
                                     <h3>@Html.ActionLink((string)@account.Institution.Name, "Details", "BankAccounts", new { id = @account.Id }, null)</h3>
                                     <h5> Balance = $@account.Balance</h5>

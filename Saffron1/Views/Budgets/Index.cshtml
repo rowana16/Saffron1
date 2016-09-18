@@ -3,6 +3,8 @@
 
 @{
     ViewBag.Title = "Index";
+    int i = 1;
+    int x = 1;
 }
 
 <h2>Index</h2>
@@ -11,23 +13,46 @@
     @Html.ActionLink("Create New", "Create")
 </p>
 
-@foreach (var budget in Model.Budgets)
-{
-    <h3>@budget.Name</h3>
+<div class="ct-chart ct-perfect-fourth"></div>
 
-    foreach (var budgetitem in Model.BudgetItems)
-    {
-        if (budgetitem.BudgetId == budget.Id)
-        {
-            <h4> @budgetitem.Category.Name || @budgetitem.Amount per @budgetitem.RepeatFrequency.Frequency </h4>
-            foreach (var transaction in Model.Transactions)
-            {
-                if (transaction.CategoryId == budgetitem.CategoryId)
-                {
-                    <p>@transaction.Category.Name ||  Amount: @transaction.Amount</p>
-                }
-            }
-        }
-    }
+@foreach (var Graphitem in Model.GraphData)
+{
+
+    <h4> @Graphitem.CategoryName  </h4>
+    string graph = "a" + @i;
+            <div class="ct-chart" id="@graph"></div>
+    i++;
+
+
 }
-<
+<script>
+    $(document).ready(function () {
+        @foreach (var GraphItem in Model.GraphData)
+        {
+            string divId = "a" + @i;
+
+            string Chart = "new Chartist.Bar('#" + @divId +  "',{  labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],  series: [ [5, 4, 3, 7, 5, 10, 3], [3, 2, 9, 5, 4, 6, 4] ]}, { seriesBarDistance: 10, reverseData: true, horizontalBars: true, axisY: {offset: 70}});";
+            @Html.Raw(Chart);
+            x++;
+        }
+
+    })
+</script>
+<script>
+
+    var data = {
+        // A labels array that can contain any sort of values
+        labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'],
+        // Our series array that contains series objects or in this case series data arrays
+        series: [
+          [5, 2, 4, 2, 0]
+        ]
+    };
+
+    // Create a new line chart object where as first parameter we pass in a selector
+    // that is resolving to our chart container element. The Second parameter
+    // is the actual data object.
+    new Chartist.Line('.ct-chart', data);
+
+</script>
+
